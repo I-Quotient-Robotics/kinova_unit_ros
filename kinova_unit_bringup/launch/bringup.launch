@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="log_type" default="screen"/>
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(find kinova_unit_description)/urdf/kinova_unit.urdf.xacro" />
+
+  <node name="j2n6s200_driver" pkg="kinova_driver" type="kinova_arm_driver" output="$(arg log_type)" cwd="node" args="j2n6s200">
+    <rosparam file="$(find kinova_unit_bringup)/config/kinova_arm.yaml" command="load" />
+    <param name="robot_name" value="j2n6s200" />
+    <param name="robot_type" value="j2n6s200" />
+    <remap from="j2n6s200_driver/out/joint_state" to="joint_states" />
+  </node>
+ 
+  <include file="$(find kinect2_bridge)/launch/kinect2_bridge.launch">
+    <arg name="reg_method" value="cpu"/>
+    <arg name="publish_tf" value="true"/>
+  </include>
+  
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="$(arg log_type)" />
+
+  <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kinova_unit_viz)/viz/view.rviz" output="$(arg log_type)" /> -->
+</launch>
