@@ -1,10 +1,13 @@
 <?xml version = "1.0"?>
-<robot name = "kinova_unit_xacro" xmlns:xacro = "http://www.ros.org/wiki/xacro">
+<robot name = "kinova_unit_xacro" xmlns:xacro = "http://ros.org/wiki/xacro">
   <xacro:property name="M_PI" value="3.1415926535897931" />
 
   <!-- sensor include -->
   <xacro:include filename="$(find kinova_description)/urdf/j2n6s200.xacro" />
-  <xacro:include filename="$(find kinova_unit_description)/urdf/kinect_v2.urdf.xacro" />
+  <!-- <xacro:include filename="$(find kinova_unit_description)/urdf/kinect_v2.urdf.xacro" /> -->
+  <xacro:include filename="$(find azure_kinect_ros_driver)/urdf/azure_kinect.urdf.xacro" />
+   <!-- realsense d435 -->
+  <xacro:include filename="$(find kinova_unit_description)/urdf/realsense_d435.urdf.xacro" />
 
     <!-- box -->
   <link name="box_link">
@@ -31,7 +34,6 @@
     </visual>
   </link>
 
-
   <link name="arm_mount_link" />
   <joint name="arm_mount_joint" type="fixed">
     <origin xyz="-0.330 0 0.732" rpy="0 0 ${M_PI/2}" />
@@ -47,7 +49,34 @@
   </joint>
 
   <!-- kinect -->
-  <xacro:kinect_v2 parent="box_link" >
-    <origin xyz="0.263 0 1.7655" rpy="0 ${M_PI/2} ${M_PI}" />
-  </xacro:kinect_v2>
+  <joint name="kinect_dk_joint" type="fixed">
+    <origin xyz="0.230 0 1.768" rpy="0 ${M_PI/2} ${M_PI}" />
+    <parent link="box_link"/>
+    <child link="camera_base"/>
+  </joint>
+
+  <!-- realsense -->
+  <link name="realsense_coupling_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="package://kinova_unit_description/mesh/kinova_realsense_coupling.stl" />
+      </geometry>
+      <material name="">
+        <color rgba="0.20 0.20 0.20 1" />
+      </material>
+    </visual>
+  </link>
+
+  <joint name="realsense_coupling_joint" type="fixed">
+    <origin xyz="0 0 0.007" rpy="0 0 0" />
+    <parent link="j2n6s200_link_6"/>
+    <child link="realsense_coupling_link"/>
+  </joint>
+
+  <sensor_d435 parent="realsense_coupling_link" prefix="camera">
+    <origin xyz="0.0875 0 -0.01515" rpy="0 ${M_PI/2} 0"/>
+  </sensor_d435>
+
+
 </robot>

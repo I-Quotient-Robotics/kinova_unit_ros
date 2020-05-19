@@ -19,6 +19,8 @@ find_package(catkin REQUIRED
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 find_package(Eigen3 REQUIRED)
+find_package(PCL 1.8 REQUIRED)
+
 
 
 ## Uncomment this if the package has a setup.py. This macro ensures
@@ -124,6 +126,10 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
+include_directories(${PCL_INCLUDE_DIRS})
+link_directories(${PCL_LIBRARY_DIRS})
+add_definitions(${PCL_DEFINITIONS})
+
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/kinova_unit_app.cpp
@@ -140,7 +146,8 @@ include_directories(
 # add_executable(${PROJECT_NAME}_node src/kinova_unit_app_node.cpp)
 add_executable(object_detect_node src/object_detect_node.cpp src/object_detect.cpp)
 add_executable(marker_detect_node src/marker_detect_node.cpp)
-add_executable(object_recognition src/object_recognition.cpp)
+add_executable(object_save src/object_save.cpp)
+add_executable(object_recognition_verification src/object_recognition_verification.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -153,7 +160,8 @@ add_executable(object_recognition src/object_recognition.cpp)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(object_detect_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(marker_detect_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(object_recognition ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(object_save ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(object_recognition_verification ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
@@ -165,9 +173,13 @@ target_link_libraries(object_detect_node
 target_link_libraries(marker_detect_node
   ${catkin_LIBRARIES}
 )
-target_link_libraries(object_recognition
+target_link_libraries(object_save
   ${catkin_LIBRARIES}
 )
+target_link_libraries(object_recognition_verification
+  ${catkin_LIBRARIES} ${PCL_LIBRARIES}
+)
+
 #############
 ## Install ##
 #############
