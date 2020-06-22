@@ -21,8 +21,6 @@ find_package(catkin REQUIRED
 find_package(Eigen3 REQUIRED)
 find_package(PCL 1.8 REQUIRED)
 
-
-
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
@@ -144,10 +142,9 @@ add_definitions(${PCL_DEFINITIONS})
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
 # add_executable(${PROJECT_NAME}_node src/kinova_unit_app_node.cpp)
-add_executable(object_detect_node src/object_detect_node.cpp src/object_detect.cpp)
-add_executable(marker_detect_node src/marker_detect_node.cpp)
-add_executable(object_save src/object_save.cpp)
-add_executable(object_recognition_verification src/object_recognition_verification.cpp)
+
+add_executable(object_save_node src/object_save_node.cpp src/object_save.cpp)
+add_executable(object_recognition_verification_node src/object_recognition_verification_node.cpp src/object_recognition_verification.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -158,25 +155,19 @@ add_executable(object_recognition_verification src/object_recognition_verificati
 ## Add cmake target dependencies of the executable
 ## same as for the library above
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(object_detect_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(marker_detect_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(object_save ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(object_recognition_verification ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+add_dependencies(object_save_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(object_recognition_verification_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
-target_link_libraries(object_detect_node
+
+target_link_libraries(object_save_node
   ${catkin_LIBRARIES}
 )
-target_link_libraries(marker_detect_node
-  ${catkin_LIBRARIES}
-)
-target_link_libraries(object_save
-  ${catkin_LIBRARIES}
-)
-target_link_libraries(object_recognition_verification
+target_link_libraries(object_recognition_verification_node
   ${catkin_LIBRARIES} ${PCL_LIBRARIES}
 )
 
