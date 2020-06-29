@@ -337,7 +337,7 @@ void ObjectDetect::PointCloudCB(const sensor_msgs::PointCloud2ConstPtr& cloud_ms
 
   if(writeornot == 0) {
 
-    writer.write ("/home/iqr/object2.pcd", *xyzCloudPtrRansacFiltered, false);
+    writer.write ("/home/iqr/catkin_ws/src/kinova_unit_ros/kinova_unit_app/pcd/object3.pcd", *xyzCloudPtrRansacFiltered, false);
     ROS_INFO("write");
   }
   writeornot += 1;

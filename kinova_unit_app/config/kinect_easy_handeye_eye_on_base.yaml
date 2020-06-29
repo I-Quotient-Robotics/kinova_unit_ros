@@ -1,5 +1,5 @@
 eye_on_hand: false
-robot_base_frame: j2n6s200_link_base
+robot_base_frame: j2s6s200_link_base
 tracking_base_frame: depth_camera_link
 transformation:
   qw: -0.07525623734801108

@@ -14,6 +14,23 @@ find_package(catkin REQUIRED
   rospy
   sensor_msgs
   rviz_visual_tools
+  message_generation
+  std_msgs
+  interactive_markers
+  moveit_core
+  moveit_visual_tools
+  moveit_ros_planning
+  moveit_ros_planning_interface
+  moveit_ros_perception
+  pluginlib
+  geometric_shapes
+  rosbag
+  tf2_ros
+  tf2_eigen
+  tf2_geometry_msgs
+  actionlib
+  actionlib_msgs
+
 )
 
 ## System dependencies are found with CMake's conventions
@@ -68,15 +85,21 @@ add_definitions(${PCL_DEFINITIONS})
 
 add_executable(object_save src/object_save.cpp)
 add_executable(object_recognition_verification src/object_recognition_verification.cpp)
+add_executable(marker_detect_node src/marker_detect_node.cpp)
 
 
 add_dependencies(object_save ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(marker_detect_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 add_dependencies(object_recognition_verification ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 
 target_link_libraries(object_save
   ${catkin_LIBRARIES}
 )
+target_link_libraries(marker_detect_node
+  ${catkin_LIBRARIES}
+)
+
 target_link_libraries(object_recognition_verification
   ${catkin_LIBRARIES} ${PCL_LIBRARIES}
 )

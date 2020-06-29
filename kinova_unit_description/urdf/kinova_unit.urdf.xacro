@@ -3,7 +3,7 @@
   <xacro:property name="M_PI" value="3.1415926535897931" />
 
   <!-- sensor include -->
-  <xacro:include filename="$(find kinova_description)/urdf/j2n6s200.xacro" />
+  <xacro:include filename="$(find kinova_description)/urdf/j2s6s200.xacro" />
   <!-- <xacro:include filename="$(find kinova_unit_description)/urdf/kinect_v2.urdf.xacro" /> -->
   <xacro:include filename="$(find azure_kinect_ros_driver)/urdf/azure_kinect.urdf.xacro" />
    <!-- realsense d435 -->
@@ -40,7 +40,7 @@
     <parent link="box_link"/>
     <child link="arm_mount_link"/>
   </joint>
-  <xacro:j2n6s200 base_parent="arm_mount_link"/> 
+  <xacro:j2s6s200 base_parent="arm_mount_link"/> 
 
   <joint name="kinect_moveable_sup_joint" type="fixed">
     <origin xyz="0 0 0" rpy="0 0 0" />
@@ -70,7 +70,7 @@
 
   <joint name="realsense_coupling_joint" type="fixed">
     <origin xyz="0 0 0.007" rpy="0 0 0" />
-    <parent link="j2n6s200_link_6"/>
+    <parent link="j2s6s200_link_6"/>
     <child link="realsense_coupling_link"/>
   </joint>
 

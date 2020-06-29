@@ -13,13 +13,14 @@ from kinova_msgs.msg import SetFingersPositionAction
 from kinova_msgs.msg import SetFingersPositionActionGoal
 
 from kinova_unit_app.srv import GetObject
+import jaco2_pick_place
 
 
 class PickPlace:
     def __init__(self):
         self.__arm_group = moveit_commander.MoveGroupCommander('arm')
-        self.__gripper_command_pub = rospy.Publisher('/j2n6s200_driver/fingers_action/finger_positions/goal', SetFingersPositionActionGoal, queue_size=10)
-        self._grasp_client = actionlib.SimpleActionClient("j2n6s200_driver/finger_action/finger_positions", SetFingersPositionAction)
+        self.__gripper_command_pub = rospy.Publisher('/j2s6s200_driver/fingers_action/finger_positions/goal', SetFingersPositionActionGoal, queue_size=10)
+        self._grasp_client = actionlib.SimpleActionClient("j2s6s200_driver/finger_action/finger_positions", SetFingersPositionAction)
         self.object_pose_sub = rospy.Subscriber("/object_pose", geometry_msgs.msg.PoseArray, self._callback)
         
         self.pose_objects = geometry_msgs.msg.PoseArray()
@@ -28,8 +29,8 @@ class PickPlace:
         rospy.sleep(1.0)
         self.__set_gripper(True)
         rospy.sleep(1.0)
-        self.__move_by_name('home')
-        rospy.sleep(1.0)
+        # self.__move_by_name('home')
+        # rospy.sleep(1.0)
 
         self.__object_service_proxy = rospy.ServiceProxy('/object_detect_node/request_first_object', GetObject)
 
@@ -57,8 +58,8 @@ class PickPlace:
     def __set_gripper(self, state):
         finger_goal = SetFingersPositionActionGoal()
         if state:
-            finger_goal.goal.fingers.finger1 = 0.0
-            finger_goal.goal.fingers.finger2 = 0.0
+            finger_goal.goal.fingers.finger1 = 1000.0
+            finger_goal.goal.fingers.finger2 = 1000.0
             self.__gripper_command_pub.publish(finger_goal)
             # self._grasp_client.send_goal(finger_goal)
         else:
@@ -79,7 +80,16 @@ class PickPlace:
         pass
 
     def run(self):
+
+        pick_place = jaco2_pick_place.Jaco2PickPlace('j2s6s200')
+        rospy.sleep(2)
         rospy.loginfo("request object pose...")
+
+        rospy.loginfo('set arm to home pose')
+        if not pick_place.ready():
+            return
+        rospy.sleep(1.0)
+
         try:
             res = self.__object_service_proxy(request_type=0)
         except rospy.ServiceException:
@@ -93,37 +103,37 @@ class PickPlace:
 
         standby_offset = math3d.Transform()
         # standby_offset.pos = math3d.Vector(-0.03, 0.08, -0.05)
-        standby_offset.pos = math3d.Vector(0.0, 0.0, -0.05)
+        standby_offset.pos = math3d.Vector(0.0, 0.0, -0.06)
         standby_transform = object_transform * standby_offset
         standby_pose_stamped = self.__convert_to_pose(standby_transform)
         standby_pose_stamped.header.frame_id = res.object_pose.header.frame_id
 
         pick_offset = math3d.Transform()
-        pick_offset.pos = math3d.Vector(0.0, 0.0, 0.04)
+        pick_offset.pos = math3d.Vector(0.0, 0.0, 0.025)
         # pick_offset.pos = math3d.Vector(-0.03, 0.08, -0.025)
         pick_transform = object_transform * pick_offset
         pick_pose_stamped = self.__convert_to_pose(pick_transform)
         pick_pose_stamped.header.frame_id = res.object_pose.header.frame_id
 
         pose_place = geometry_msgs.msg.PoseStamped()
-        pose_place.header.frame_id = "j2n6s200_link_base"
-        pose_place.pose.position.x = -0.415640056133
-        pose_place.pose.position.y = -0.107773765922
-        pose_place.pose.position.z = 0.213838279247
-        pose_place.pose.orientation.w = 0.0716448649764
-        pose_place.pose.orientation.x =  0.800027191639
-        pose_place.pose.orientation.y = -0.591541945934
-        pose_place.pose.orientation.z = -0.0700122192502
+        pose_place.header.frame_id = "j2s6s200_link_base"
+        pose_place.pose.position.x = -0.286990189552
+        pose_place.pose.position.y = -0.453882825375
+        pose_place.pose.position.z = 0.105741010904
+        pose_place.pose.orientation.w = 0.0568502917886
+        pose_place.pose.orientation.x =  0.94724547863
+        pose_place.pose.orientation.y = -0.315277636051
+        pose_place.pose.orientation.z = -0.00969966873527
 
         pose_place_stanby = geometry_msgs.msg.PoseStamped()
-        pose_place_stanby.header.frame_id = "j2n6s200_link_base"
-        pose_place_stanby.pose.position.x = -0.415640056133
-        pose_place_stanby.pose.position.y = -0.107773765922
-        pose_place_stanby.pose.position.z = 0.313838279247
-        pose_place_stanby.pose.orientation.w = 0.0716448649764
-        pose_place_stanby.pose.orientation.x =  0.800027191639
-        pose_place_stanby.pose.orientation.y = -0.591541945934
-        pose_place_stanby.pose.orientation.z = -0.0700122192502
+        pose_place_stanby.header.frame_id = "j2s6s200_link_base"
+        pose_place_stanby.pose.position.x = -0.286990189552
+        pose_place_stanby.pose.position.y = -0.453882825375
+        pose_place_stanby.pose.position.z = 0.201631618738
+        pose_place_stanby.pose.orientation.w = 0.0514585077763
+        pose_place_stanby.pose.orientation.x =  0.94907283783
+        pose_place_stanby.pose.orientation.y = -0.310767769814
+        pose_place_stanby.pose.orientation.z = -0.00600713305175
 
         rospy.loginfo("object pose: %s, %s, %s", res.object_pose.pose.position.x, res.object_pose.pose.position.y, res.object_pose.pose.position.z)
         rospy.loginfo("standby pose: %s, %s, %s", standby_pose_stamped.pose.position.x, standby_pose_stamped.pose.position.y, standby_pose_stamped.pose.position.z)
@@ -162,12 +172,22 @@ class PickPlace:
         self.__set_gripper(True)
         rospy.sleep(2.0)
 
-        if self.__move_by_name('home') is not True:
-            rospy.loginfo("unable to get home pose")
+        if self.__move_by_pose(pose_place_stanby) is not True:
+            rospy.loginfo("unable to get place standby pose")
             return
 
-        # self.__set_gripper(True)
-        # rospy.sleep(2.0)
+        rospy.loginfo('set arm to home pose')
+        if not pick_place.home():
+            return
+        rospy.sleep(2.0)
+
+        # if self.__move_by_name('home') is not True:
+        #     rospy.loginfo("unable to get home pose")
+        #     return
+
+        # rospy.loginfo('set arm to home pose')
+        # if not pick_place.ready():
+        #     return
 
         rospy.loginfo("finish")
 

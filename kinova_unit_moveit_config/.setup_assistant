@@ -8,4 +8,4 @@ moveit_setup_assistant_config:
   CONFIG:
     author_name: hangliu
     author_email: hang.liu@iquotient-robotics.com
-    generated_timestamp: 1589443699
+    generated_timestamp: 1593255459

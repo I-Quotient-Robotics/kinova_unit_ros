@@ -8,7 +8,7 @@
       <param name="image_is_rectified" value="True"/>
       <param name="marker_size"        value="0.57"/>
       <param name="marker_id"          value="9"/>
-      <param name="reference_frame"    value="j2n6s200_link_base"/>   <!-- frame in which the marker pose will be refered -->
+      <param name="reference_frame"    value="j2s6s200_link_base"/>   <!-- frame in which the marker pose will be refered -->
       <param name="camera_frame"       value="depth_camera_link"/>
       <param name="marker_frame"       value="aruco_marker_frame" />
       <param name="corner_refinement"  value="LINES" />
@@ -20,8 +20,8 @@
     <arg name="move_group" value="arm"/>
 
     <!-- fill in the following parameters according to your robot's published tf frames -->
-    <arg name="robot_base_frame" value="j2n6s200_link_base"/>
-    <arg name="robot_effector_frame" value="j2n6s200_end_effector"/>
+    <arg name="robot_base_frame" value="j2s6s200_link_base"/>
+    <arg name="robot_effector_frame" value="j2s6s200_end_effector"/>
 
     <!-- fill in the following parameters according to your tracking system's published tf frames -->
     <arg name="tracking_base_frame" value="depth_camera_link"/>

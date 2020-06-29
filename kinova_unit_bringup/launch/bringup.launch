@@ -5,23 +5,35 @@
 
   <param name="robot_description" command="$(find xacro)/xacro --inorder $(find kinova_unit_description)/urdf/kinova_unit.urdf.xacro tf_prefix:=$(arg tf_prefix)" />
 
-  <node name="j2n6s200_driver" pkg="kinova_driver" type="kinova_arm_driver" output="$(arg log_type)" cwd="node" args="j2n6s200">
+  <node name="j2s6s200_driver" pkg="kinova_driver" type="kinova_arm_driver" output="$(arg log_type)" cwd="node" args="j2s6s200">
     <rosparam file="$(find kinova_unit_bringup)/config/kinova_arm.yaml" command="load" />
-    <param name="robot_name" value="j2n6s200" />
-    <param name="robot_type" value="j2n6s200" />
-    <remap from="j2n6s200_driver/out/joint_state" to="joint_states" />
+    <param name="robot_name" value="j2s6s200" />
+    <param name="robot_type" value="j2s6s200" />
+    <remap from="j2s6s200_driver/out/joint_state" to="joint_states" />
   </node>
  
   <include file="$(find azure_kinect_ros_driver)/launch/driver.launch">
   </include>
   
-  <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+  <include file="$(find realsense2_camera)/launch/rs_d435_camera_with_model.launch">
+    <arg name="tf_prefix"             value="camera"/>
+    <arg name="initial_reset"         value="false"/>
+    <arg name="enable_sync"           value="true"/>
+    <arg name="align_depth"           value="true"/>
   </include>
 
 <!--   <include file="$(find kinova_unit_app)/launch/publish.launch">
   </include> -->
 
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="$(arg log_type)" />
+
+  <include file="$(find zed_wrapper)/launch/zed.launch">
+  </include>
+
+  <node name="syntouch" pkg="biotac_sensors" type="biotac_pub" />
+
+  <include file="$(find kinova_unit_moveit_config)/launch/excute.launch">
+  </include>
 
   <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find kinova_unit_viz)/viz/view.rviz" output="$(arg log_type)" /> -->
 </launch>

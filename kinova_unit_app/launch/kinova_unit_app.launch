@@ -8,4 +8,8 @@
     <param name="debug_output_topic" value="/debug_pointcloud_output" />
     <param name="object_visual_markers_topic" value="/object_visual_markers" />
   </node>
+
+  <node pkg="kinova_unit_app" type="kinova_unit_app_node.py" name="object_detect">
+  </node>
+
 </launch>
