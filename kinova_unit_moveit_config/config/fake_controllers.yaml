@@ -1,13 +1,16 @@
 controller_list:
   - name: fake_arm_controller
     joints:
-      - j2s6s200_joint_1
-      - j2s6s200_joint_2
-      - j2s6s200_joint_3
-      - j2s6s200_joint_4
-      - j2s6s200_joint_5
-      - j2s6s200_joint_6
+      - arm_joint_1
+      - arm_joint_2
+      - arm_joint_3
+      - arm_joint_4
+      - arm_joint_5
+      - arm_joint_6
+      - arm_joint_7
   - name: fake_gripper_controller
     joints:
-      - j2s6s200_joint_finger_1
-      - j2s6s200_joint_finger_2
+      - arm_finger_joint
+initial:  # Define initial robot poses.
+  - group: arm
+    pose: home

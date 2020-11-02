@@ -8,42 +8,42 @@ add_compile_options(-std=c++11)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED
-  pcl_conversions
-  pcl_ros
+  # pcl_conversions
+  # pcl_ros
   roscpp
   rospy
   sensor_msgs
   rviz_visual_tools
   message_generation
   std_msgs
-  interactive_markers
+  # interactive_markers
   moveit_core
   moveit_visual_tools
   moveit_ros_planning
   moveit_ros_planning_interface
   moveit_ros_perception
-  pluginlib
-  geometric_shapes
-  rosbag
+  # pluginlib
+  # geometric_shapes
+  # rosbag
   tf2_ros
-  tf2_eigen
+  # tf2_eigen
   tf2_geometry_msgs
   actionlib
   actionlib_msgs
-
+  aruco_msgs
 )
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
-find_package(Eigen3 REQUIRED)
-find_package(PCL 1.8 REQUIRED)
+# find_package(Eigen3 REQUIRED)
+# find_package(PCL 1.8 REQUIRED)
 
 
 ## Generate services in the 'srv' folder
-add_service_files(
-  FILES
-  GetObject.srv
-)
+# add_service_files(
+#   FILES
+#   GetObject.srv
+# )
 
 ## Generate actions in the 'action' folder
 # add_action_files(
@@ -53,11 +53,11 @@ add_service_files(
 # )
 
 ## Generate added messages and services with any dependencies listed here
-generate_messages(
-  DEPENDENCIES
-  std_msgs  # Or other packages containing msgs
-  geometry_msgs
-)
+# generate_messages(
+#   DEPENDENCIES
+#   std_msgs  # Or other packages containing msgs
+#   geometry_msgs
+# )
 
 
 catkin_package(
@@ -83,23 +83,23 @@ add_definitions(${PCL_DEFINITIONS})
 # )
 
 
-add_executable(object_save src/object_save.cpp)
-add_executable(object_recognition_verification src/object_recognition_verification.cpp)
-add_executable(marker_detect_node src/marker_detect_node.cpp)
+# add_executable(object_save src/object_save.cpp)
+# add_executable(object_recognition_verification src/object_recognition_verification.cpp)
+# add_executable(marker_detect_node src/marker_detect_node.cpp)
 
 
-add_dependencies(object_save ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(marker_detect_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
-add_dependencies(object_recognition_verification ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(object_save ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(marker_detect_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+# add_dependencies(object_recognition_verification ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 
-target_link_libraries(object_save
-  ${catkin_LIBRARIES}
-)
-target_link_libraries(marker_detect_node
-  ${catkin_LIBRARIES}
-)
+# target_link_libraries(object_save
+#   ${catkin_LIBRARIES}
+# )
+# target_link_libraries(marker_detect_node
+#   ${catkin_LIBRARIES}
+# )
 
-target_link_libraries(object_recognition_verification
-  ${catkin_LIBRARIES} ${PCL_LIBRARIES}
-)
+# target_link_libraries(object_recognition_verification
+#   ${catkin_LIBRARIES} ${PCL_LIBRARIES}
+# )

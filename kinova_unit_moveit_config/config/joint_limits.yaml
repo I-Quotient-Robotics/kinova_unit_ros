@@ -2,47 +2,68 @@
 # Specific joint properties can be changed with the keys [max_position, min_position, max_velocity, max_acceleration]
 # Joint limits can be turned off with [has_velocity_limits, has_acceleration_limits]
 joint_limits:
-  j2s6s200_joint_1:
-    min_position: 3.14
-    max_position: 6.28   
+  arm_finger_joint:
     has_velocity_limits: true
-    max_velocity: 0.628318530718
+    max_velocity: 2
     has_acceleration_limits: false
     max_acceleration: 0
-  j2s6s200_joint_2:
+  arm_joint_1:
     has_velocity_limits: true
-    max_velocity: 0.628318530718
+    max_velocity: 1.3963
     has_acceleration_limits: false
     max_acceleration: 0
-  j2s6s200_joint_3:
+  arm_joint_2:
     has_velocity_limits: true
-    max_velocity: 0.628318530718
+    max_velocity: 1.3963
     has_acceleration_limits: false
     max_acceleration: 0
-  j2s6s200_joint_4:
+  arm_joint_3:
     has_velocity_limits: true
-    max_velocity: 0.637758040957
+    max_velocity: 1.3963
     has_acceleration_limits: false
     max_acceleration: 0
-  j2s6s200_joint_5:
+  arm_joint_4:
     has_velocity_limits: true
-    max_velocity: 0.637758040957
+    max_velocity: 1.3963
     has_acceleration_limits: false
     max_acceleration: 0
-  j2s6s200_joint_6:
-    min_position: 1.89
-    max_position: 8.17
+  arm_joint_5:
     has_velocity_limits: true
-    max_velocity: 0.637758040957
+    max_velocity: 1.2218
     has_acceleration_limits: false
     max_acceleration: 0
-  j2s6s200_joint_finger_1:
+  arm_joint_6:
     has_velocity_limits: true
-    max_velocity: 1
+    max_velocity: 1.2218
     has_acceleration_limits: false
     max_acceleration: 0
-  j2s6s200_joint_finger_2:
+  arm_joint_7:
     has_velocity_limits: true
-    max_velocity: 1
+    max_velocity: 1.2218
+    has_acceleration_limits: false
+    max_acceleration: 0
+  arm_left_inner_finger_joint:
+    has_velocity_limits: true
+    max_velocity: 2
+    has_acceleration_limits: false
+    max_acceleration: 0
+  arm_left_inner_knuckle_joint:
+    has_velocity_limits: true
+    max_velocity: 2
+    has_acceleration_limits: false
+    max_acceleration: 0
+  arm_right_inner_finger_joint:
+    has_velocity_limits: true
+    max_velocity: 2
+    has_acceleration_limits: false
+    max_acceleration: 0
+  arm_right_inner_knuckle_joint:
+    has_velocity_limits: true
+    max_velocity: 2
+    has_acceleration_limits: false
+    max_acceleration: 0
+  arm_right_outer_knuckle_joint:
+    has_velocity_limits: true
+    max_velocity: 2
     has_acceleration_limits: false
     max_acceleration: 0

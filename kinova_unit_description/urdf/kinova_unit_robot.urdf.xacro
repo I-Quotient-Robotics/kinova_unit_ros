@@ -1,0 +1,22 @@
+<?xml version = "1.0"?>
+<robot name = "kinova_unit_robot" xmlns:xacro = "http://www.ros.org/wiki/xacro">
+    <xacro:arg name="arm" default="gen3" />
+    <xacro:arg name="dof" default="7" />
+    <xacro:arg name="vision" default="true" />
+    <xacro:arg name="gripper" default="robotiq_2f_85" />
+
+    <xacro:arg name="sim" default="false" />
+    <xacro:arg name="prefix" default="arm_" />
+
+    <xacro:include filename="$(find kortex_description)/robots/kortex_robot.xacro" />
+
+    <link name="base_link" />
+
+    <joint name="arm_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="base_link" />
+      <child link="arm_base_link" />
+    </joint>
+
+    <xacro:load_robot arm="$(arg arm)" gripper="$(arg gripper)" dof="$(arg dof)" vision="$(arg vision)" sim="$(arg sim)" prefix="$(arg prefix)" />
+</robot>

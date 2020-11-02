@@ -1,3 +1,0 @@
-int8 request_type
----
-geometry_msgs/PoseStamped object_pose
