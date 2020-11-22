@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="log_type" default="screen"/>
+
+  <node pkg="rail_segmentation" type="rail_segmentation" name="rail_segmentation_node" output="$(arg log_type)">
+    <param name="debug" value="true" />
+    <param name="use_color" value="false" />
+    <param name="label_markers" value="true" />
+    <param name="zones_config" value="$(find kinova_unit_app)/config/zones.yaml" />
+    <param name="point_cloud_topic" value="/camera/depth_registered/points" />
+  </node>
+
+  <node pkg="kinova_unit_app" type="pick_place_kortex_demo.py" name="pick_place_kortex_demo_node" ns="arm" output="$(arg log_type)" />
+
+</launch>

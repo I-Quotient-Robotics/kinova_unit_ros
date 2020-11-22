@@ -20,8 +20,7 @@ from kortex_driver.srv import *
 from kortex_driver.msg import *
 
 standby_angles = [-0.014987737982748328, -0.027526965659276037, -3.0575376969486032, -1.6082968307365206, 0.012235710536044116, -1.515626281652815, 1.6584779762085564]
-# place_angles = [0.9832577165848853, 0.6053833874101963, -2.7782615808119178, -1.9881051474948253, -0.39862088669862406, -0.6114372852001644, 2.48761749524612]
-place_angles = [1.1076634919033836, 0.5153878171939075, -2.38087107453691, -2.0801714253271912, -0.4948435600442771, -0.7359176956082125, 2.1527774524421304]
+place_angles = [0.9832577165848853, 0.6053833874101963, -2.7782615808119178, -1.9881051474948253, -0.39862088669862406, -0.6114372852001644, 2.48761749524612]
 
 
 class PickPlace:
@@ -38,10 +37,6 @@ class PickPlace:
         send_gripper_command_full_name = rospy.get_namespace() + '/base/send_gripper_command'
         rospy.wait_for_service(send_gripper_command_full_name)
         self.__send_gripper_command_srv = rospy.ServiceProxy(send_gripper_command_full_name, SendGripperCommand)
-
-        # send_gripper_command_full_name = rospy.get_namespace() + '/base/delete_all_sequence_tasks'
-        # rospy.wait_for_service(send_gripper_command_full_name)
-        # self.__send_gripper_command_srv = rospy.ServiceProxy(send_gripper_command_full_name, SendGripperCommand)
 
         self.__object_pose_array_pub = rospy.Publisher('object_pose_array', PoseArray, queue_size=10)
         self.__rail_segmentation_proxy = rospy.ServiceProxy('/rail_segmentation_node/segment_objects', SegmentObjects)
@@ -78,7 +73,16 @@ class PickPlace:
 
     def __move_by_pose(self, target_pose):
         self.__arm_group.set_pose_target(target_pose)
-        return self.__arm_group.go(wait=True)
+
+        result = False
+
+        try:
+            result = self.__arm_group.go(wait=True)
+        except Exception as e:
+            rospy.logerr('move by pose failed: %s', e)
+            result = False
+
+        return result
 
     def __move_by_name(self, target_name):
         self.__arm_group.set_named_target(target_name)
@@ -136,17 +140,29 @@ class PickPlace:
             self.__move_by_joint_angle(standby_angles)
             rospy.sleep(0.2)
 
+            # put to other side
+            place_pose = seg_response.segmented_objects.objects[0].bounding_volume.pose.pose
+            place_pose.position.y *= -1.0
+            place_p = posemath.fromMsg(place_pose)
+
             rospy.loginfo('place')
-            self.__move_by_joint_angle(place_angles)
+            f = PyKDL.Frame(PyKDL.Rotation.RPY(-math.pi/2.0, 0, math.pi/2.0), PyKDL.Vector(0.01, 0, 0))
+            self.__move_by_pose(posemath.toMsg(place_p*f))
+            # self.__move_by_joint_angle(place_angles)
             rospy.sleep(0.2)
 
             rospy.loginfo('open gripper')
             self.__set_gripper(True)
             rospy.sleep(0.2)
 
+            rospy.loginfo('leave up')
+            f = PyKDL.Frame(PyKDL.Rotation.RPY(-math.pi/2.0, 0, math.pi/2.0), PyKDL.Vector(0.05, 0, 0))
+            self.__move_by_pose(posemath.toMsg(place_p*f))
+            rospy.sleep(0.2)            
+
             rospy.loginfo('standby')
             self.__move_by_joint_angle(standby_angles)
-            rospy.sleep(0.2)
+            rospy.sleep(1.0)
 
         except rospy.ServiceException as exc:
             rospy.logwarn('rail segmentation service did not process request: ' + str(exc))
@@ -158,14 +174,17 @@ class PickPlace:
 
 def main():
     moveit_commander.roscpp_initialize(sys.argv)
-    rospy.init_node('pick_place_demo_node')
+    rospy.init_node('pick_place_demo_2_node')
 
     pick_place = PickPlace()
     pick_place.initialize()
 
+    count = 0
     rate = rospy.Rate(0.4)
     while not rospy.is_shutdown():
         pick_place.run()
+        rospy.loginfo('count: %d', count)
+        count += 1
         rate.sleep()
 
 
